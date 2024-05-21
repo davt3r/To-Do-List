@@ -1,13 +1,13 @@
 <template>
   <div class="todo-app">
-    <header>
-      <h1>To Do List</h1>
-    </header>
     <div class="content">
       <aside class="sidebar">
+        <header>
+          <h1>To Do List</h1>
+        </header>
         <ul>
           <li v-for="(task, index) in filteredTasks" :key="index">
-            <input type="checkbox" v-model="task.completed" />
+            <input type="checkbox" v-model="task.completed" @change="updateLocalStorage" />
             <span :class="{ completed: task.completed }">{{ task.text }}</span>
             <button @click="removeTask(index)">Eliminar</button>
           </li>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       newTask: '',
-      tasks: [],
+      tasks: JSON.parse(localStorage.getItem('tasks')) || [],
       filter: 'all'
     }
   },
@@ -52,10 +52,15 @@ export default {
       if (this.newTask.trim() !== '') {
         this.tasks.push({ text: this.newTask, completed: false })
         this.newTask = ''
+        this.updateLocalStorage()
       }
     },
     removeTask(index) {
       this.tasks.splice(index, 1)
+      this.updateLocalStorage()
+    },
+    updateLocalStorage() {
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     }
   }
 }
@@ -64,33 +69,30 @@ export default {
 <style scoped>
 .todo-app {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  height: 100vh;
   font-family: Arial, sans-serif;
 
-  min-height: 100vh;
   margin: 0;
-  padding: 0;
-}
-
-header {
-  margin-bottom: 20px;
 }
 
 .content {
   display: flex;
   width: 100%;
-  height: calc(100vh - 80px);
 }
 
 .sidebar {
-  width: 25%;
+  width: 15%;
 
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   overflow-y: auto;
+}
+
+.sidebar header {
+  margin-bottom: 20px;
 }
 
 .main-content {
