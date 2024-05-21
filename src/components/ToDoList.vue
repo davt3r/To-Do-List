@@ -5,43 +5,33 @@
         <header>
           <h1>To Do List</h1>
         </header>
-        <ul>
-          <li v-for="(task, index) in filteredTasks" :key="index">
-            <input type="checkbox" v-model="task.completed" @change="updateLocalStorage" />
-            <div>
-              <span :class="{ completed: task.completed }">{{ task.text }}</span>
-              <p class="description">{{ task.description }}</p>
-            </div>
-            <button @click="removeTask(index)">Eliminar</button>
-          </li>
-        </ul>
+        <TaskList
+          :tasks="filteredTasks"
+          @remove-task="removeTask"
+          @update-tasks="updateLocalStorage"
+        />
       </aside>
       <main class="main-content">
-        <div class="task-form">
-          <input v-model="newTask" @keyup.enter="addTask" placeholder="Agregar una nueva tarea" />
-          <textarea
-            v-model="newDescription"
-            @keyup.enter="addTask"
-            placeholder="Agregar una descripción"
-          ></textarea>
-          <button @click="addTask">Agregar</button>
-        </div>
-        <div class="filters">
-          <button @click="filter = 'all'">Todas</button>
-          <button @click="filter = 'active'">Activas</button>
-          <button @click="filter = 'completed'">Completadas</button>
-        </div>
+        <TaskForm @add-task="addTask" />
+        <TaskFilters @set-filter="setFilter" />
       </main>
     </div>
   </div>
 </template>
 
 <script>
+import TaskList from './TaskList.vue'
+import TaskForm from './TaskForm.vue'
+import TaskFilters from './TaskFilters.vue'
+
 export default {
+  components: {
+    TaskList,
+    TaskForm,
+    TaskFilters
+  },
   data() {
     return {
-      newTask: '',
-      newDescription: '',
       tasks: JSON.parse(localStorage.getItem('tasks')) || [],
       filter: 'all'
     }
@@ -59,17 +49,16 @@ export default {
     }
   },
   methods: {
-    addTask() {
-      if (this.newTask.trim() !== '') {
-        this.tasks.push({ text: this.newTask, description: this.newDescription, completed: false })
-        this.newTask = ''
-        this.newDescription = ''
-        this.updateLocalStorage()
-      }
+    addTask(task) {
+      this.tasks.push(task)
+      this.updateLocalStorage()
     },
     removeTask(index) {
       this.tasks.splice(index, 1)
       this.updateLocalStorage()
+    },
+    setFilter(filter) {
+      this.filter = filter
     },
     updateLocalStorage() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
@@ -109,93 +98,5 @@ export default {
 .main-content {
   width: 85%;
   padding: 20px;
-}
-
-.task-form {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
-.task-form input,
-.task-form textarea {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.task-form button {
-  align-self: flex-start;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.task-form button:hover {
-  background-color: #0056b3;
-}
-
-.filters {
-  margin-top: 20px;
-}
-
-.filters button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-right: 10px;
-}
-
-.filters button:hover {
-  background-color: #0056b3;
-}
-
-.completed {
-  text-decoration: line-through;
-}
-
-button {
-  margin-left: 10px;
-}
-
-input[type='checkbox'] {
-  margin-right: 10px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-li div {
-  flex-grow: 1;
-}
-
-li span {
-  display: block;
-}
-
-li .description {
-  margin: 0;
-  font-size: 12px;
-  color: #666;
 }
 </style>
