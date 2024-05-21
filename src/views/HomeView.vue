@@ -1,9 +1,18 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+<template>
+  <div>
+    <TodoList />
+  </div>
+</template>
+
+<script>
+import ToDoList from '../components/ToDoList.vue'
+
+export default {
+  name: 'HomeView',
+  components: {
+    TodoList: ToDoList
+  }
+}
 </script>
 
-<template>
-  <main>
-    <TheWelcome />
-  </main>
-</template>
+<style scoped></style>
