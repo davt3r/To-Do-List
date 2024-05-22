@@ -2,18 +2,15 @@
   <div class="todo-app">
     <div class="content">
       <aside class="sidebar">
-        <header>
-          <h1>To Do List</h1>
-        </header>
+        <TaskFilters @set-filter="setFilter" />
+      </aside>
+      <main class="main-content">
+        <router-link to="/create" class="create-task-button">Crear Tarea</router-link>
         <TaskList
           :tasks="filteredTasks"
           @remove-task="removeTask"
           @update-tasks="updateLocalStorage"
         />
-      </aside>
-      <main class="main-content">
-        <TaskForm @add-task="addTask" />
-        <TaskFilters @set-filter="setFilter" />
       </main>
     </div>
   </div>
@@ -21,13 +18,11 @@
 
 <script>
 import TaskList from './TaskList.vue'
-import TaskForm from './TaskForm.vue'
 import TaskFilters from './TaskFilters.vue'
 
 export default {
   components: {
     TaskList,
-    TaskForm,
     TaskFilters
   },
   data() {
@@ -70,14 +65,14 @@ export default {
 <style scoped>
 .todo-app {
   display: flex;
-  height: 100vh;
+  height: 100%;
   font-family: Arial, sans-serif;
-  margin: 0;
 }
 
 .content {
   display: flex;
   width: 100%;
+  height: 100%;
 }
 
 .sidebar {
@@ -87,16 +82,25 @@ export default {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 100vh;
   overflow-y: auto;
-}
-
-.sidebar header {
-  margin-bottom: 20px;
 }
 
 .main-content {
   width: 85%;
   padding: 20px;
+  overflow-y: auto;
+}
+
+.create-task-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.create-task-button:hover {
+  background-color: #0056b3;
 }
 </style>

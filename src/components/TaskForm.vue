@@ -1,11 +1,11 @@
 <template>
   <div class="task-form">
     <input v-model="newTask" @keyup.enter="submitTask" placeholder="Agregar una nueva tarea" />
-    <textarea
+    <input
       v-model="newDescription"
       @keyup.enter="submitTask"
       placeholder="Agregar una descripción"
-    ></textarea>
+    />
     <button @click="submitTask">Agregar</button>
   </div>
 </template>

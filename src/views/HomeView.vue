@@ -1,18 +1,34 @@
 <template>
-  <div>
-    <TodoList />
+  <div class="home-view">
+    <HeaderTitle />
+    <div class="content">
+      <Sidebar />
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import ToDoList from '../components/ToDoList.vue'
+import HeaderTitle from '../components/HeaderTitle.vue'
+import Sidebar from '../components/Sidebar.vue'
 
 export default {
-  name: 'HomeView',
   components: {
-    TodoList: ToDoList
+    HeaderTitle,
+    Sidebar
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.home-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+}
+</style>

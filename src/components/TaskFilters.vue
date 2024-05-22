@@ -1,8 +1,8 @@
 <template>
   <div class="filters">
-    <button @click="setFilter('all')">Todas</button>
-    <button @click="setFilter('active')">Activas</button>
-    <button @click="setFilter('completed')">Completadas</button>
+    <span @click="setFilter('all')">Todas</span>
+    <span @click="setFilter('active')">Activas</span>
+    <span @click="setFilter('completed')">Completadas</span>
   </div>
 </template>
 
@@ -18,19 +18,17 @@ export default {
 
 <style scoped>
 .filters {
+  display: flex;
+  flex-direction: column;
   margin-top: 20px;
 }
-.filters button {
-  padding: 10px 20px;
+.filters span {
+  padding: 10px 0;
   font-size: 16px;
-  border: none;
-  background-color: #007bff;
-  color: white;
   cursor: pointer;
-  border-radius: 4px;
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
-.filters button:hover {
-  background-color: #0056b3;
+.filters span:hover {
+  color: #007bff;
 }
 </style>
