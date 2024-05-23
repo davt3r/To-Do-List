@@ -21,7 +21,7 @@ export default {
   methods: {
     submitTask() {
       if (this.newTask.trim() !== '') {
-        this.$emit('add-task', {
+        this.$emit('task-added', {
           text: this.newTask,
           description: this.newDescription,
           completed: false
