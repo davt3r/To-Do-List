@@ -8,6 +8,7 @@
         <TaskColumn title="In Progress" :tasks="tasks.inProgress" />
         <TaskColumn title="Done" :tasks="tasks.done" />
       </div>
+      <TaskForm @task-added="addTaskToTodo" />
     </div>
   </div>
 </template>
@@ -16,12 +17,14 @@
 import HeaderTitle from '../components/HeaderTitle.vue'
 import Sidebar from '../components/Sidebar.vue'
 import TaskColumn from '../components/TaskColumns.vue'
+import TaskForm from '../components/TaskForm.vue'
 
 export default {
   components: {
     HeaderTitle,
     Sidebar,
-    TaskColumn
+    TaskColumn,
+    TaskForm
   },
   data() {
     return {
@@ -33,9 +36,22 @@ export default {
     }
   },
   methods: {
+    loadTasks() {
+      const storedTasks = localStorage.getItem('tasks')
+      if (storedTasks) {
+        this.tasks = JSON.parse(storedTasks)
+        console.log('Tareas cargadas desde localStorage:', this.tasks)
+      }
+    },
     addTaskToTodo(task) {
+      console.log('Tarea agregada a To Do:', task)
       this.tasks.todo.push(task)
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+      console.log('Tareas To Do:', this.tasks.todo)
     }
+  },
+  created() {
+    this.loadTasks()
   }
 }
 </script>
@@ -54,5 +70,12 @@ export default {
 
 .task-columns {
   display: flex;
+  flex: 1;
+}
+
+.task-columns > * {
+  flex: 1;
+  min-width: 300px; /* Ajusta el ancho mínimo según sea necesario */
+  margin: 0 8px;
 }
 </style>

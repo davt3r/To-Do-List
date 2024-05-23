@@ -21,6 +21,7 @@ export default {
   methods: {
     submitTask() {
       if (this.newTask.trim() !== '') {
+        console.log('Nueva tarea:', this.newTask, this.newDescription)
         this.$emit('task-added', {
           text: this.newTask,
           description: this.newDescription,
