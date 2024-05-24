@@ -22,37 +22,26 @@ export default {
   methods: {
     addTask(task) {
       let tasks = JSON.parse(localStorage.getItem('tasks')) || {
-        todo: [],
-        inProgress: [],
-        done: []
+        todas: [],
+        personal: [],
+        trabajo: []
       }
-      console.log(
-        JSON.parse(localStorage.getItem('tasks')),
-        'Tareas en localStorage antes de agregar una nueva tarea'
-      )
-      console.log(task, 'Nueva tarea recibida')
-      console.log(task.status, 'Estado de la nueva tarea')
 
-      // Distribuir la tarea en la columna correspondiente
-      switch (task.status) {
-        case 'todo':
-          tasks.todo.push(task)
+      switch (task.category) {
+        case 'todas':
+          tasks.todas.push(task)
           break
-        case 'inProgress':
-          tasks.inProgress.push(task)
+        case 'personal':
+          tasks.personal.push(task)
           break
-        case 'done':
-          tasks.done.push(task)
+        case 'trabajo':
+          tasks.trabajo.push(task)
           break
         default:
-          console.error('Estado de tarea no válido:', task.status)
       }
 
       localStorage.setItem('tasks', JSON.stringify(tasks))
-      console.log(
-        JSON.parse(localStorage.getItem('tasks')),
-        'Tareas en localStorage después de agregar una nueva tarea'
-      )
+
       this.$router.push({ name: 'home' })
     }
   }

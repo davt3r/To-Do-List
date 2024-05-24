@@ -6,15 +6,12 @@
       @keyup.enter="submitTask"
       placeholder="Agregar una descripción"
     />
-    <select v-model="taskStatus">
-      <option value="todo">Por hacer</option>
-      <option value="inProgress">En progreso</option>
-      <option value="done">Finalizada</option>
-    </select>
+    <label for="completed-checkbox">Completada:</label>
+    <input type="checkbox" id="completed-checkbox" v-model="completed" />
     <select v-model="taskCategory">
+      <option value="todas">Todo</option>
       <option value="personal">Personal</option>
       <option value="trabajo">Trabajo</option>
-      <option value="todo">Todo</option>
     </select>
     <button @click="submitTask">Agregar</button>
   </div>
@@ -26,8 +23,8 @@ export default {
     return {
       newTask: '',
       newDescription: '',
-      taskStatus: 'todo',
-      taskCategory: 'personal'
+      completed: false,
+      taskCategory: 'todas'
     }
   },
   methods: {
@@ -36,17 +33,16 @@ export default {
         const newTask = {
           text: this.newTask,
           description: this.newDescription,
-          status: this.taskStatus,
+          status: this.completed ? 'done' : 'todo',
           category: this.taskCategory,
-          completed: false
+          completed: this.completed
         }
-        console.log(newTask, 'TaskForm submitTask')
 
         this.$emit('task-added', newTask)
 
         this.newTask = ''
         this.newDescription = ''
-        this.taskStatus = 'todo'
+        this.completed = false
         this.taskCategory = 'personal'
       }
     }

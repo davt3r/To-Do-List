@@ -1,14 +1,22 @@
 <template>
   <div class="sidebar">
-    <router-link :to="{ name: 'home' }" class="sidebar-link">Lista</router-link>
     <router-link :to="{ name: 'create' }" class="sidebar-link">Crear Tarea</router-link>
+    <router-link :to="{ name: 'home' }" class="sidebar-link">Lista de Notas</router-link>
+    <button @click="filterTasks('todas')" class="sidebar-link">Todas</button>
+    <button @click="filterTasks(true)" class="sidebar-link">Completadas</button>
+    <button @click="filterTasks(false)" class="sidebar-link">Pendientes</button>
   </div>
 </template>
 
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Sidebar'
+  name: 'Sidebar',
+  methods: {
+    filterTasks(completed) {
+      this.$emit('filter-changed', completed)
+    }
+  }
 }
 </script>
 
