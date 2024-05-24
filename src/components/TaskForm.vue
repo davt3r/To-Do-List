@@ -6,6 +6,16 @@
       @keyup.enter="submitTask"
       placeholder="Agregar una descripción"
     />
+    <select v-model="taskStatus">
+      <option value="todo">Por hacer</option>
+      <option value="inProgress">En progreso</option>
+      <option value="done">Finalizada</option>
+    </select>
+    <select v-model="taskCategory">
+      <option value="personal">Personal</option>
+      <option value="trabajo">Trabajo</option>
+      <option value="todo">Todo</option>
+    </select>
     <button @click="submitTask">Agregar</button>
   </div>
 </template>
@@ -15,20 +25,29 @@ export default {
   data() {
     return {
       newTask: '',
-      newDescription: ''
+      newDescription: '',
+      taskStatus: 'todo',
+      taskCategory: 'personal'
     }
   },
   methods: {
     submitTask() {
       if (this.newTask.trim() !== '') {
-        console.log('Nueva tarea:', this.newTask, this.newDescription)
-        this.$emit('task-added', {
+        const newTask = {
           text: this.newTask,
           description: this.newDescription,
+          status: this.taskStatus,
+          category: this.taskCategory,
           completed: false
-        })
+        }
+        console.log(newTask, 'TaskForm submitTask')
+
+        this.$emit('task-added', newTask)
+
         this.newTask = ''
         this.newDescription = ''
+        this.taskStatus = 'todo'
+        this.taskCategory = 'personal'
       }
     }
   }
@@ -42,6 +61,7 @@ export default {
   margin-bottom: 20px;
 }
 .task-form input,
+.task-form select,
 .task-form textarea {
   padding: 10px;
   font-size: 16px;
