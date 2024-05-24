@@ -1,11 +1,10 @@
 <template>
-  <div class="task-columns">
-    <div class="column">
-      <h2>{{ todoTitle }}</h2>
-      <div class="tasks">
-        <slot name="todo">
-          <p v-for="task in tasks.todo" :key="task.id">{{ task.text }}</p>
-        </slot>
+  <div class="column">
+    <h2>{{ title }}</h2>
+    <div class="tasks">
+      <div class="task" v-for="(task, index) in tasks" :key="index">
+        <h3>{{ task.text }}</h3>
+        <p>{{ task.description }}</p>
       </div>
     </div>
   </div>
@@ -14,52 +13,53 @@
 <script>
 export default {
   props: {
-    title: String
-  },
-  data() {
-    return {
-      tasks: {
-        todo: [],
-        inProgress: [],
-        done: []
-      }
-    }
+    title: String,
+    tasks: Array
   },
   watch: {
-    tasks: {
-      handler: function (newTasks) {
-        localStorage.setItem(`${this.title}_tasks`, JSON.stringify(newTasks))
-      },
-      deep: true
+    tasks(newTasks) {
+      console.log(`Tareas en ${this.title}:`, newTasks)
     }
   },
   created() {
-    const storedTasks = localStorage.getItem(`${this.title}_tasks`)
-    if (storedTasks) {
-      this.tasks = JSON.parse(storedTasks)
-    }
+    console.log(`Componente ${this.title} creado con tareas:`, this.tasks)
   }
 }
 </script>
 
 <style scoped>
-.task-columns {
-  display: flex;
-}
-
 .column {
   flex: 1;
   margin: 0 8px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .tasks {
   margin-top: 8px;
 }
 
-.tasks p {
-  margin: 4px 0;
+.task {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.task p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
 }
 </style>

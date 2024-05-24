@@ -3,9 +3,7 @@
     <HeaderTitle />
     <div class="content">
       <Sidebar />
-      <main class="main-content">
-        <TaskForm @add-task="addTask" />
-      </main>
+      <TaskForm @task-added="addTask" />
     </div>
   </div>
 </template>
@@ -17,12 +15,21 @@ import TaskForm from '../components/TaskForm.vue'
 
 export default {
   components: {
+    HeaderTitle,
     Sidebar,
-    TaskForm,
-    HeaderTitle
+    TaskForm
   },
   methods: {
-    addTask() {}
+    addTask(task) {
+      let tasks = JSON.parse(localStorage.getItem('tasks')) || {
+        todo: [],
+        inProgress: [],
+        done: []
+      }
+      tasks.todo.push(task)
+      localStorage.setItem('tasks', JSON.stringify(tasks))
+      this.$router.push({ name: 'home' })
+    }
   }
 }
 </script>
@@ -37,30 +44,5 @@ export default {
 .content {
   display: flex;
   flex: 1;
-}
-
-.sidebar {
-  width: 200px;
-  background-color: #f0f0f0;
-  padding: 20px;
-}
-
-.sidebar a {
-  display: block;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: #333;
-}
-
-.sidebar a:hover {
-  color: #007bff;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 250px;
 }
 </style>
