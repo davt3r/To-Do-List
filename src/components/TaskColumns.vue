@@ -2,27 +2,38 @@
   <div class="column">
     <h2>{{ title }}</h2>
     <div class="tasks">
-      <div class="task" v-for="(task, index) in tasks" :key="index">
-        <h3>{{ task.text }}</h3>
-        <p>{{ task.description }}</p>
-      </div>
+      <TaskItem
+        v-for="(task, index) in tasks"
+        :key="index"
+        :task="task"
+        :taskIndex="index"
+        :columnType="columnType"
+        @edit-task="editTask"
+        @delete-task="deleteTask"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import TaskItem from './TaskItem.vue'
+
 export default {
+  components: {
+    TaskItem
+  },
   props: {
     title: String,
-    tasks: Array
+    tasks: Array,
+    columnType: String
   },
-  watch: {
-    tasks(newTasks) {
-      console.log(`Tareas en ${this.title}:`, newTasks)
+  methods: {
+    editTask({ index, column, updatedTask }) {
+      this.$emit('edit-task', { index, column, updatedTask })
+    },
+    deleteTask({ index, column }) {
+      this.$emit('delete-task', { index, column })
     }
-  },
-  created() {
-    console.log(`Componente ${this.title} creado con tareas:`, this.tasks)
   }
 }
 </script>
@@ -40,26 +51,5 @@ export default {
 
 .tasks {
   margin-top: 8px;
-}
-
-.task {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.task h3 {
-  margin: 0 0 5px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.task p {
-  margin: 0;
-  font-size: 14px;
-  color: #666;
 }
 </style>

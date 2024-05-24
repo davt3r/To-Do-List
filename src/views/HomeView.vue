@@ -4,11 +4,28 @@
     <div class="content">
       <Sidebar />
       <div class="task-columns">
-        <TaskColumn title="To Do" :tasks="tasks.todo" />
-        <TaskColumn title="In Progress" :tasks="tasks.inProgress" />
-        <TaskColumn title="Done" :tasks="tasks.done" />
+        <TaskColumn
+          title="To Do"
+          :tasks="tasks.todo"
+          columnType="todo"
+          @edit-task="editTask"
+          @delete-task="deleteTask"
+        />
+        <TaskColumn
+          title="In Progress"
+          :tasks="tasks.inProgress"
+          columnType="inProgress"
+          @edit-task="editTask"
+          @delete-task="deleteTask"
+        />
+        <TaskColumn
+          title="Done"
+          :tasks="tasks.done"
+          columnType="done"
+          @edit-task="editTask"
+          @delete-task="deleteTask"
+        />
       </div>
-      <TaskForm @task-added="addTaskToTodo" />
     </div>
   </div>
 </template>
@@ -17,14 +34,12 @@
 import HeaderTitle from '../components/HeaderTitle.vue'
 import Sidebar from '../components/Sidebar.vue'
 import TaskColumn from '../components/TaskColumns.vue'
-import TaskForm from '../components/TaskForm.vue'
 
 export default {
   components: {
     HeaderTitle,
     Sidebar,
-    TaskColumn,
-    TaskForm
+    TaskColumn
   },
   data() {
     return {
@@ -46,8 +61,19 @@ export default {
     addTaskToTodo(task) {
       console.log('Tarea agregada a To Do:', task)
       this.tasks.todo.push(task)
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+      this.updateLocalStorage()
       console.log('Tareas To Do:', this.tasks.todo)
+    },
+    editTask({ index, column, updatedTask }) {
+      this.tasks[column].splice(index, 1, updatedTask)
+      this.updateLocalStorage()
+    },
+    deleteTask({ index, column }) {
+      this.tasks[column].splice(index, 1)
+      this.updateLocalStorage()
+    },
+    updateLocalStorage() {
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     }
   },
   created() {
