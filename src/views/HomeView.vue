@@ -2,26 +2,14 @@
   <div class="home-view">
     <HeaderTitle />
     <div class="content">
-      <Sidebar />
+      <Sidebar @filter-changed="handleFilterChanged" />
       <div class="task-columns">
         <TaskColumn
-          title="Por Hacer"
-          :tasks="tasks.todo"
-          columnType="todo"
-          @edit-task="editTask"
-          @delete-task="deleteTask"
-        />
-        <TaskColumn
-          title="En proceso"
-          :tasks="tasks.inProgress"
-          columnType="inProgress"
-          @edit-task="editTask"
-          @delete-task="deleteTask"
-        />
-        <TaskColumn
-          title="Completadas"
-          :tasks="tasks.done"
-          columnType="done"
+          v-for="(category, categoryName) in tasks"
+          :key="categoryName"
+          :title="categoryName"
+          :tasks="filteredTasks(categoryName)"
+          :columnType="categoryName"
           @edit-task="editTask"
           @delete-task="deleteTask"
         />
@@ -44,10 +32,11 @@ export default {
   data() {
     return {
       tasks: {
-        todo: [],
-        inProgress: [],
-        done: []
-      }
+        todas: [],
+        personal: [],
+        trabajo: []
+      },
+      showCompleted: null
     }
   },
   methods: {
@@ -55,7 +44,6 @@ export default {
       const storedTasks = localStorage.getItem('tasks')
       if (storedTasks) {
         this.tasks = JSON.parse(storedTasks)
-        console.log('Tareas cargadas desde localStorage:', this.tasks)
       }
     },
     editTask({ index, column, updatedTask }) {
@@ -68,7 +56,20 @@ export default {
     },
     updateLocalStorage() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
-    }
+    },
+    handleFilterChanged(completed) {
+      this.showCompleted = completed !== 'todas' ? completed : null
+      this.printFilteredTasks()
+    },
+    filteredTasks(category) {
+      if (this.showCompleted === null) {
+        return this.tasks[category]
+      } else if (this.showCompleted === true || this.showCompleted === false) {
+        return this.tasks[category].filter((task) => task.completed === this.showCompleted)
+      }
+    },
+
+    printFilteredTasks() {}
   },
   created() {
     this.loadTasks()
