@@ -5,21 +5,21 @@
       <Sidebar />
       <div class="task-columns">
         <TaskColumn
-          title="To Do"
+          title="Por Hacer"
           :tasks="tasks.todo"
           columnType="todo"
           @edit-task="editTask"
           @delete-task="deleteTask"
         />
         <TaskColumn
-          title="In Progress"
+          title="En proceso"
           :tasks="tasks.inProgress"
           columnType="inProgress"
           @edit-task="editTask"
           @delete-task="deleteTask"
         />
         <TaskColumn
-          title="Done"
+          title="Completadas"
           :tasks="tasks.done"
           columnType="done"
           @edit-task="editTask"
@@ -57,12 +57,6 @@ export default {
         this.tasks = JSON.parse(storedTasks)
         console.log('Tareas cargadas desde localStorage:', this.tasks)
       }
-    },
-    addTaskToTodo(task) {
-      console.log('Tarea agregada a To Do:', task)
-      this.tasks.todo.push(task)
-      this.updateLocalStorage()
-      console.log('Tareas To Do:', this.tasks.todo)
     },
     editTask({ index, column, updatedTask }) {
       this.tasks[column].splice(index, 1, updatedTask)

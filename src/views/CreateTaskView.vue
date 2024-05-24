@@ -26,7 +26,23 @@ export default {
         inProgress: [],
         done: []
       }
-      tasks.todo.push(task)
+      console.log(JSON.parse(localStorage.getItem('tasks')), 'asdasdadadasdasdad')
+      console.log(task, '12313')
+      console.log(task.status, '12ddddddd313')
+      switch (task.status) {
+        case 'todo':
+          tasks.todo.push(task)
+          break
+        case 'inProgress':
+          tasks.inProgress.push(task)
+          break
+        case 'done':
+          tasks.done.push(task)
+          break
+        default:
+          console.error('Estado de tarea no válido:', task.status)
+      }
+
       localStorage.setItem('tasks', JSON.stringify(tasks))
       this.$router.push({ name: 'home' })
     }
