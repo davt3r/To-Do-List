@@ -75,7 +75,7 @@ export default {
 
 .task-columns > * {
   flex: 1;
-  min-width: 300px; /* Ajusta el ancho mínimo según sea necesario */
+  min-width: 300px;
   margin: 0 8px;
 }
 </style>
