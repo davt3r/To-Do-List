@@ -26,9 +26,14 @@ export default {
         inProgress: [],
         done: []
       }
-      console.log(JSON.parse(localStorage.getItem('tasks')), 'asdasdadadasdasdad')
-      console.log(task, '12313')
-      console.log(task.status, '12ddddddd313')
+      console.log(
+        JSON.parse(localStorage.getItem('tasks')),
+        'Tareas en localStorage antes de agregar una nueva tarea'
+      )
+      console.log(task, 'Nueva tarea recibida')
+      console.log(task.status, 'Estado de la nueva tarea')
+
+      // Distribuir la tarea en la columna correspondiente
       switch (task.status) {
         case 'todo':
           tasks.todo.push(task)
@@ -44,6 +49,10 @@ export default {
       }
 
       localStorage.setItem('tasks', JSON.stringify(tasks))
+      console.log(
+        JSON.parse(localStorage.getItem('tasks')),
+        'Tareas en localStorage después de agregar una nueva tarea'
+      )
       this.$router.push({ name: 'home' })
     }
   }
