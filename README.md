@@ -1,35 +1,19 @@
-# ToDoList
+# Task Management App
 
-This template should help get you started developing with Vue 3 in Vite.
+## Descripción
 
-## Recommended IDE Setup
+La Task Management App es una aplicación web diseñada para ayudar a los usuarios a gestionar sus tareas diarias de manera eficiente. La aplicación permite a los usuarios crear, editar y organizar tareas en diferentes categorías, como "personal" y "trabajo". Las tareas se almacenan en el navegador del usuario utilizando `localStorage`, lo que garantiza que las tareas persistan entre sesiones.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Características
 
-## Customize configuration
+- **CRUD de Tareas**: Permite a los usuarios agregar, borrar, leer y editar tareas con un título, descripción, estado de completado y categoría.
+- **Categorías de Tareas**: Las tareas se pueden categorizar como "todas", "personal" o "trabajo".
+- **Persistencia de Datos**: Las tareas se almacenan en `localStorage`, lo que asegura que las tareas permanezcan disponibles incluso después de cerrar el navegador.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Licencia
 
-## Project Setup
+Este proyecto está licenciado bajo la Licencia MIT. Para más detalles, consulta el archivo [LICENSE](LICENSE).
 
-```sh
-npm install
-```
+## Autor
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Desarrollado por davt3r. Puedes contactarme en [daviidgt03@gmail.com].
