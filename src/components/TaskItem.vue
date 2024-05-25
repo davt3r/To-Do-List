@@ -1,5 +1,5 @@
 <template>
-  <div class="task">
+  <div class="task" draggable="true" @dragstart="handleDragStart" @dragend="handleDragEnd">
     <div v-if="isEditing">
       <input v-model="editedText" placeholder="Edit task text" />
       <input v-model="editedDescription" placeholder="Edit task description" />
@@ -49,7 +49,13 @@ export default {
         column: this.columnType
       })
       this.isEditing = false
-    }
+    },
+    handleDragStart(event) {
+      event.dataTransfer.setData('text/plain', this.taskIndex)
+      event.dataTransfer.setData('columnType', this.columnType)
+      event.dataTransfer.effectAllowed = 'move'
+    },
+    handleDragEnd() {}
   }
 }
 </script>
@@ -85,5 +91,9 @@ export default {
 
 .task button {
   margin-right: 5px;
+}
+
+.task.dragging {
+  opacity: 0.5;
 }
 </style>
