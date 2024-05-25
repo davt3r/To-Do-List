@@ -5,13 +5,14 @@
       <Sidebar @filter-changed="handleFilterChanged" />
       <div class="task-columns">
         <TaskColumn
-          v-for="(category, categoryName) in tasks"
+          v-for="(tasks, categoryName) in tasks"
           :key="categoryName"
           :title="categoryName"
           :tasks="filteredTasks(categoryName)"
           :columnType="categoryName"
           @edit-task="editTask"
           @delete-task="deleteTask"
+          @move-task="moveTask"
         />
       </div>
     </div>
@@ -54,6 +55,13 @@ export default {
       this.tasks[column].splice(index, 1)
       this.updateLocalStorage()
     },
+    moveTask({ newIndex, newColumn, oldIndex, oldColumn }) {
+      const taskToMove = this.tasks[oldColumn][oldIndex]
+      taskToMove.column = newColumn
+      this.tasks[oldColumn].splice(oldIndex, 1)
+      this.tasks[newColumn].splice(newIndex, 0, taskToMove)
+      this.updateLocalStorage()
+    },
     updateLocalStorage() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
     },
@@ -68,8 +76,16 @@ export default {
         return this.tasks[category].filter((task) => task.completed === this.showCompleted)
       }
     },
-
-    printFilteredTasks() {}
+    printFilteredTasks() {
+      console.log(this.tasks)
+      console.log(
+        'Tareas filtradas:',
+        Object.keys(this.tasks).reduce((acc, category) => {
+          acc[category] = this.filteredTasks(category)
+          return acc
+        }, {})
+      )
+    }
   },
   created() {
     this.loadTasks()
@@ -96,7 +112,13 @@ export default {
 
 .task-columns > * {
   flex: 1;
-  min-width: 300px;
-  margin: 0 8px;
+  width: 20px;
+  margin: 20px;
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
 }
 </style>

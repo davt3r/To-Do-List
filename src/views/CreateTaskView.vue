@@ -2,8 +2,12 @@
   <div class="create-task-view">
     <HeaderTitle />
     <div class="content">
-      <Sidebar />
-      <TaskForm @task-added="addTask" />
+      <div class="sidebar-container">
+        <Sidebar />
+      </div>
+      <div class="form-container">
+        <TaskForm @task-added="addTask" />
+      </div>
     </div>
   </div>
 </template>
@@ -58,5 +62,39 @@ export default {
 .content {
   display: flex;
   flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar {
+  position: fixed;
+  left: 1;
+  margin-top: 70px;
+}
+
+.form-container {
+  padding: 20px;
+}
+
+.form-container input,
+.form-container select,
+.form-container button {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.form-container button {
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
 }
 </style>
