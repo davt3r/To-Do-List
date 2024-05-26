@@ -23,6 +23,7 @@
 import HeaderTitle from '../components/HeaderTitle.vue'
 import Sidebar from '../components/Sidebar.vue'
 import TaskColumn from '../components/TaskColumns.vue'
+import { useTasks } from '../helpers/useTasks'
 
 export default {
   components: {
@@ -30,65 +31,32 @@ export default {
     Sidebar,
     TaskColumn
   },
-  data() {
+  setup() {
+    const {
+      tasks,
+      showCompleted,
+      loadTasks,
+      editTask,
+      deleteTask,
+      moveTask,
+      updateLocalStorage,
+      handleFilterChanged,
+      filteredTasks,
+      printFilteredTasks
+    } = useTasks()
+
     return {
-      tasks: {
-        todas: [],
-        personal: [],
-        trabajo: []
-      },
-      showCompleted: null
+      tasks,
+      showCompleted,
+      loadTasks,
+      editTask,
+      deleteTask,
+      moveTask,
+      updateLocalStorage,
+      handleFilterChanged,
+      filteredTasks,
+      printFilteredTasks
     }
-  },
-  methods: {
-    loadTasks() {
-      const storedTasks = localStorage.getItem('tasks')
-      if (storedTasks) {
-        this.tasks = JSON.parse(storedTasks)
-      }
-    },
-    editTask({ index, column, updatedTask }) {
-      this.tasks[column].splice(index, 1, updatedTask)
-      this.updateLocalStorage()
-    },
-    deleteTask({ index, column }) {
-      this.tasks[column].splice(index, 1)
-      this.updateLocalStorage()
-    },
-    moveTask({ newIndex, newColumn, oldIndex, oldColumn }) {
-      const taskToMove = this.tasks[oldColumn][oldIndex]
-      taskToMove.column = newColumn
-      this.tasks[oldColumn].splice(oldIndex, 1)
-      this.tasks[newColumn].splice(newIndex, 0, taskToMove)
-      this.updateLocalStorage()
-    },
-    updateLocalStorage() {
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
-    },
-    handleFilterChanged(completed) {
-      this.showCompleted = completed !== 'todas' ? completed : null
-      this.printFilteredTasks()
-    },
-    filteredTasks(category) {
-      if (this.showCompleted === null) {
-        return this.tasks[category]
-      } else if (this.showCompleted === true || this.showCompleted === false) {
-        return this.tasks[category].filter((task) => task.completed === this.showCompleted)
-      }
-    },
-    printFilteredTasks() {
-      console.log(this.tasks)
-      console.log(
-        'Tareas filtradas:',
-        Object.keys(this.tasks).reduce((acc, category) => {
-          acc[category] = this.filteredTasks(category)
-          return acc
-        }, {})
-      )
-    }
-  },
-  created() {
-    this.loadTasks()
   }
 }
 </script>

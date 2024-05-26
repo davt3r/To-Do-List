@@ -1,5 +1,5 @@
 <template>
-  <div class="task-column" @dragover.prevent @drop="handleDrop($event)">
+  <div class="task-column" @dragover.prevent @drop="handleDrop($event, $emit)">
     <h2 class="column-title">{{ title }}</h2>
     <div
       v-for="(task, index) in tasks"
@@ -63,47 +63,38 @@
 </template>
 
 <script>
+import { useTaskColumn } from '../helpers/useTaskColumn'
+
 export default {
   props: {
     title: String,
     tasks: Array,
     columnType: String
   },
-  data() {
-    return {
-      editingIndex: null,
-      originalTask: null
+  setup(props, { emit }) {
+    const {
+      editingIndex,
+      isEditing,
+      startEdit,
+      saveEdit,
+      cancelEdit,
+      handleDragStart,
+      handleDrop
+    } = useTaskColumn(props.tasks, props.columnType)
+
+    const saveEditAndEmit = (index, columnType) => {
+      saveEdit(index)
+      emit('edit-task', { index, column: columnType, updatedTask: props.tasks[index] })
     }
-  },
-  methods: {
-    isEditing(index) {
-      return this.editingIndex === index
-    },
-    startEdit(index) {
-      this.editingIndex = index
-      this.originalTask = { ...this.tasks[index] }
-    },
-    saveEdit(index, column) {
-      this.$emit('edit-task', { index, column, updatedTask: this.tasks[index] })
-      this.editingIndex = null
-    },
-    cancelEdit() {
-      this.$set(this.tasks, this.editingIndex, this.originalTask)
-      this.editingIndex = null
-    },
-    handleDragStart(event, index) {
-      console.log('Drag start:', index)
-      event.dataTransfer.setData('index', index)
-      event.dataTransfer.setData('column', this.columnType)
-    },
-    handleDrop(event) {
-      event.preventDefault()
-      const oldIndex = event.dataTransfer.getData('index')
-      const oldColumn = event.dataTransfer.getData('column')
-      console.log('Drop in column', this.columnType)
-      if (oldIndex && oldColumn !== this.columnType) {
-        this.$emit('move-task', { newIndex: null, oldIndex, oldColumn, newColumn: this.columnType })
-      }
+
+    return {
+      editingIndex,
+      isEditing,
+      startEdit,
+      saveEdit: saveEditAndEmit,
+      cancelEdit,
+      handleDragStart,
+      handleDrop
     }
   }
 }
@@ -194,6 +185,7 @@ export default {
 .task-completed {
   font-weight: bold;
 }
+
 .column-title {
   font-size: 1.3em;
   font-weight: bold;
